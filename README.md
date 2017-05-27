@@ -18,13 +18,14 @@ The line class uterly failed at trying to grasp the complexity of the final vide
 Using sliding windows to search for the highest amount of pixel spaces was a good start, but the biggest problem was that the left and right sides were not dependent on each other and the shapes they formed did not have to be curved splines. To address both of these problems, instead of using two seperate sliding windows, the windows were attached together by some connecting distance seperator, see the illustration below for the template. Also the the template could also slide in one direction, to the left or right, this meant it would have to produce nice looking curves and this was the results that we expected to find anyway.
 
 # The curve template used per vertical level
-#  (left_window + right_window)
-#
-#  (padding)                                                                (padding)           /\
-#   <------ |---window_width--|           (+)         |---window_width---|  -------->           |
-#           |---left_window---|_______________________|---right_window---|                      | level
-#         <------>  |----------------center_dis-----------------|   <------>                    |
-#       (slide_res)                                                (slide_res)                  -
+
+  (left_window + right_window)
+
+  (padding)                                                                (padding)           /\
+   <------ |---window_width--|           (+)         |---window_width---|  -------->           |
+          |---left_window---|_______________________|---right_window---|                      | level
+         <------>  |----------------center_dis-----------------|   <------>                    |
+       (slide_res)                                                (slide_res)                  -
 
 To get even better results the template didnt have to just search from top to bottom in increments of 1 level, instead it could skip levels incase and interpolte incase if going level 1 by 1 it would have gone down a bad path and missed a better one, such as if there is alot of noise. Note that this assumes that lane lines both end at the top of the image, and this meant fitting the transformation so that was the case. This was the reason why the first video and third video had different outward lengths. It should also be noted that the transformed image have it so the two lane lines were nearly parallel to each other, if meeting these two conditions along with good binary images the advance lane tracker was showed to achieve good results. 
 
@@ -42,4 +43,14 @@ Also the Project called for working on images intially and outputing its binary 
 
 Please checkout the final results video link included at the top which showcases the performance on all 3 videos. The results on all videos was satisfying I would say but as always could use more work and polish, espeacially for creating a dynamic binary outputing, but its very easy to find more and more things to work on for this kind of open ended projects. It would also be interesting to explore more on speed tracking which could be a really cool feature if it started getting accurate results. Next step to be implemented to this project is vehicle detection, COMMING SOON.
 
+## Porting to Python 2.7
 
+The original author may be working on python 3.0, so there is minor errors occurring when it comes to python 2.7. This is python 2.7 compatible version.
+
+First of all, calibrate the camera with the following, it will pickle the params in `calibration_pickle.p` to be later used.
+
+    python camera_calibrate.py
+
+Then for the images perform the tracking algorithm with
+
+    python main_image_gen.py
