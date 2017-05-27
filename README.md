@@ -19,13 +19,15 @@ Using sliding windows to search for the highest amount of pixel spaces was a goo
 
 # The curve template used per vertical level
 
-  (left_window + right_window)
+      (left_window + right_window)
 
-  (padding)                                                                (padding)           /\
-   <------ |---window_width--|           (+)         |---window_width---|  -------->           |
-          |---left_window---|_______________________|---right_window---|                      | level
-         <------>  |----------------center_dis-----------------|   <------>                    |
-       (slide_res)                                                (slide_res)                  -
+      (padding)                                                                (padding)           /\
+
+       <------ |---window_width--|           (+)         |---window_width---|  -------->           |
+               |---left_window---|_______________________|---right_window---|  
+                                                                            | level
+             <------>  |----------------center_dis-----------------|   <------>                    |
+           (slide_res)                                                (slide_res)                  -
 
 To get even better results the template didnt have to just search from top to bottom in increments of 1 level, instead it could skip levels incase and interpolte incase if going level 1 by 1 it would have gone down a bad path and missed a better one, such as if there is alot of noise. Note that this assumes that lane lines both end at the top of the image, and this meant fitting the transformation so that was the case. This was the reason why the first video and third video had different outward lengths. It should also be noted that the transformed image have it so the two lane lines were nearly parallel to each other, if meeting these two conditions along with good binary images the advance lane tracker was showed to achieve good results. 
 
