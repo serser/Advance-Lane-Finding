@@ -107,7 +107,7 @@ for idx, fname in enumerate(images):
 	warped = cv2.warpPerspective(preprocessImage,M,img_size,flags=cv2.INTER_LINEAR)
 
 	# Set up the overall class to do all the tracking
-	curve_centers = Tracker(Mycenter_dis = .275*1280, Mywindow_width = 25, Mywindow_height = 40, Mypadding = 25, Myslide_res = 5, Myframe_ps = 1, My_ym = 10/720, My_xm = 4/384)
+	curve_centers = Tracker(Mycenter_dis = int(.275*1280), Mywindow_width = 25, Mywindow_height = 40, Mypadding = 25, Myslide_res = 5, Myframe_ps = 1, My_ym = 10.0/720, My_xm = 4.0/384)
 
 	# find the best line centers based on the binary pixel of interest input
 	frame_centers = curve_centers.track_line(warped)
@@ -142,7 +142,8 @@ for idx, fname in enumerate(images):
 	graphic_measure = cv2.addWeighted(warpage, 0.2, template, 0.75, 0.0)
 	
 	# fit the lane boundaries to the left,right center positions found
-	yvals = range(0,warped.shape[0])
+	# yvals = range(0,warped.shape[0])
+	yvals = np.arange(warped.shape[0])
 
 	left_fit = np.polyfit(res_yvals, leftx, 3)
 	left_fitx = left_fit[0]*yvals*yvals*yvals + left_fit[1]*yvals*yvals + left_fit[2]*yvals+left_fit[3]

@@ -221,39 +221,39 @@ class Tracker():
                         for pad in range(-self.padding*2,self.padding*2,self.slide_res):
                             conv_template = np.concatenate((np.ones(self.window_width),np.zeros(self.center_dis-self.window_width+pad),np.ones(self.window_width)))
                             conv_signal = np.convolve(conv_template, np.sum(warped[int(warped.shape[0]-(level+1)*40):int(warped.shape[0]-level*40),:], axis=0))
-                            if ((((line_ref == 1) & (curve_direction == 1)) & (len(conv_signal[max(r_center+self.window_width/2+r_dis,0):min(r_center+self.window_width/2+self.padding+r_dis,warped.shape[1])]) != 0) ) | (((line_ref == 1) & (curve_direction == -1)) & (len(conv_signal[max(r_center+self.window_width/2-self.padding+r_dis,0):min(r_center+self.window_width/2+r_dis,warped.shape[1])]) != 0 )) \
-                                    | (((line_ref == -1) & (curve_direction == 1)) & ((len(conv_signal[max(l_center+self.window_width/2+self.center_dis+pad+l_dis,0):min(l_center+self.window_width/2+self.center_dis+pad+self.padding+l_dis,warped.shape[1])])) != 0)) | (((line_ref == -1) & (curve_direction == -1)) & ((len(conv_signal[max(l_center+self.window_width/2-self.padding+self.center_dis+pad+l_dis,0):min(l_center+self.window_width/2+self.center_dis+pad+l_dis,warped.shape[1])])) != 0) )):
+                            if ((((line_ref == 1) & (curve_direction == 1)) & (len(conv_signal[int(max(r_center+self.window_width/2+r_dis,0)):int(min(r_center+self.window_width/2+self.padding+r_dis,warped.shape[1]))]) != 0) ) | (((line_ref == 1) & (curve_direction == -1)) & (len(conv_signal[int(max(r_center+self.window_width/2-self.padding+r_dis,0)):int(min(r_center+self.window_width/2+r_dis,warped.shape[1]))]) != 0 )) \
+                                    | (((line_ref == -1) & (curve_direction == 1)) & ((len(conv_signal[int(max(l_center+self.window_width/2+self.center_dis+pad+l_dis,0)):int(min(l_center+self.window_width/2+self.center_dis+pad+self.padding+l_dis,warped.shape[1]))])) != 0)) | (((line_ref == -1) & (curve_direction == -1)) & ((len(conv_signal[int(max(l_center+self.window_width/2-self.padding+self.center_dis+pad+l_dis,0)):int(min(l_center+self.window_width/2+self.center_dis+pad+l_dis,warped.shape[1]))]) != 0) ))):
                                 if line_ref == 1:
                                     if curve_direction == 1:
-                                        pos = np.argmax(conv_signal[max(r_center+self.window_width/2+r_dis,0):min(r_center+self.window_width/2+self.padding+r_dis,warped.shape[1])])+max(r_center+r_dis,0)
+                                        pos = np.argmax(conv_signal[int(max(r_center+self.window_width/2+r_dis,0)):int(min(r_center+self.window_width/2+self.padding+r_dis,warped.shape[1]))])+int(max(r_center+r_dis,0))
                                     else:
-                                        pos = np.argmax(conv_signal[max(r_center+self.window_width/2-self.padding+r_dis,0):min(r_center+self.window_width/2+r_dis,warped.shape[1])])+max(r_center-self.padding+r_dis,0)
+                                        pos = np.argmax(conv_signal[int(max(r_center+self.window_width/2-self.padding+r_dis,0)):int(min(r_center+self.window_width/2+r_dis,warped.shape[1]))])+int(max(r_center-self.padding+r_dis,0))
                                 else:
                                     if curve_direction == 1:
-                                        pos = np.argmax(conv_signal[max(l_center+self.window_width/2+self.center_dis+pad+l_dis,0):min(l_center+self.window_width/2+self.center_dis+pad+self.padding+l_dis,warped.shape[1])])+max(l_center+self.center_dis+pad+l_dis,0)
+                                        pos = np.argmax(conv_signal[int(max(l_center+self.window_width/2+self.center_dis+pad+l_dis,0)):int(min(l_center+self.window_width/2+self.center_dis+pad+self.padding+l_dis,warped.shape[1]))])+int(max(l_center+self.center_dis+pad+l_dis,0))
                                     else:
-                                        pos = np.argmax(conv_signal[max(l_center+self.window_width/2-self.padding+self.center_dis+pad+l_dis,0):min(l_center+self.window_width/2+self.center_dis+pad+l_dis,warped.shape[1])])+max(l_center-self.padding+self.center_dis+pad+l_dis,0)
+                                        pos = np.argmax(conv_signal[int(max(l_center+self.window_width/2-self.padding+self.center_dis+pad+l_dis,0)):int(min(l_center+self.window_width/2+self.center_dis+pad+l_dis,warped.shape[1]))])+int(max(l_center-self.padding+self.center_dis+pad+l_dis,0))
                                 max_pos.append(pos)
                                 if line_ref == 1:
                                     if curve_direction == 1:
                                         if abs(l_center - (pos-(self.center_dis+pad))) < (self.padding+abs(r_dis)):
-                                            max_value = np.amax(conv_signal[max(r_center+self.window_width/2+r_dis,0):min(r_center+self.window_width/2+self.padding+r_dis,warped.shape[1])])
+                                            max_value = np.amax(conv_signal[int(max(r_center+self.window_width/2+r_dis,0)):int(min(r_center+self.window_width/2+self.padding+r_dis,warped.shape[1]))])
                                         else:
                                             max_value = -10
                                     else:
                                         if abs(l_center - (pos-(self.center_dis+pad))) < (self.padding+abs(+r_dis)):
-                                            max_value = np.amax(conv_signal[max(r_center+self.window_width/2-self.padding+r_dis,0):min(r_center+self.window_width/2+r_dis,warped.shape[1])])
+                                            max_value = np.amax(conv_signal[int(max(r_center+self.window_width/2-self.padding+r_dis,0)):int(min(r_center+self.window_width/2+r_dis,warped.shape[1]))])
                                         else:
                                             max_value = -10
                                 else:
                                     if curve_direction == 1:
                                         if abs(r_center - pos) < (self.padding+abs(l_dis)):
-                                            max_value = np.amax(conv_signal[max(l_center+self.window_width/2+self.center_dis+pad+l_dis,0):min(l_center+self.window_width/2+self.center_dis+pad+self.padding+l_dis,warped.shape[1])])
+                                            max_value = np.amax(conv_signal[int(max(l_center+self.window_width/2+self.center_dis+pad+l_dis,0)):int(min(l_center+self.window_width/2+self.center_dis+pad+self.padding+l_dis,warped.shape[1]))])
                                         else:
                                             max_value = -10
                                     else:
                                         if abs(r_center - pos) < (self.padding+abs(l_dis)):
-                                            max_value = np.amax(conv_signal[max(l_center+self.window_width/2-self.padding+self.center_dis+pad+l_dis,0):min(l_center+self.window_width/2+self.center_dis+pad+l_dis,warped.shape[1])])
+                                            max_value = np.amax(conv_signal[int(max(l_center+self.window_width/2-self.padding+self.center_dis+pad+l_dis,0)):int(min(l_center+self.window_width/2+self.center_dis+pad+l_dis,warped.shape[1]))])
                                         else:
                                             max_value = -10   
                                 max_values.append(max_value)

@@ -1,0 +1,4 @@
+.vscode
+test_images/tracked*.jpg
+camera_cal/corners_found*.jpg
+*.pyc
